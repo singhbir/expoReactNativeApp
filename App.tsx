@@ -5,6 +5,11 @@ import RootStackNavigator from "./src/Routes/RootStackNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import storeConfig from "./src/Redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+import firebase from "firebase";
+import { firebaseConfig } from "./src/utilities/firebaseConfig";
+
+firebase.initializeApp(firebaseConfig);
 
 export default function App() {
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,9 +22,11 @@ export default function App() {
 
   return (
     <Provider store={storeConfig.store}>
-      <NavigationContainer>
-        <RootStackNavigator />
-      </NavigationContainer>
+      <PersistGate loading={null} persistor={storeConfig.persistor}>
+        <NavigationContainer>
+          <RootStackNavigator />
+        </NavigationContainer>
+      </PersistGate>
     </Provider>
   );
 }
